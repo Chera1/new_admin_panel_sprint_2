@@ -1,16 +1,35 @@
 version: '3'
 services:
+  db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: '123qwe'
+    volumes:
+      - /home/chera/postgresql/data:/var/lib/postgresql/data
+
   service:
-    build: app
+    # Путь к Dockerfile для сервиса
+    build:
+      context: app
+#     Порт, с которого сервис будет доступен на локальной машине
     expose:
       - "8000"
+    links:
+      - db
+    environment:
+        DB_HOST: db
+    volumes:
+      - ./app/example/static:/opt/app/static/
 
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./configs:/etc/nginx/conf.d:ro
-      - ./data:/data/:ro
+      - ./app/example/static:/opt/app/static/
     depends_on:
       - service
     ports:
