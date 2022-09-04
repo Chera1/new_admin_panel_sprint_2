@@ -14,7 +14,6 @@ services:
     # Путь к Dockerfile для сервиса
     build:
       context: app
-#     Порт, с которого сервис будет доступен на локальной машине
     expose:
       - "8000"
     links:
