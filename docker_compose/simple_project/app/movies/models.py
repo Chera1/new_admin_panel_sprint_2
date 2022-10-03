@@ -86,7 +86,7 @@ class PersonFilmWork(UUIDMixin):
     class Meta:
         db_table = 'content\".\"person_film_work'
         constraints = [
-            models.UniqueConstraint(fields=['film_work_id', 'person_id', 'role'], name='film_work_person_idx'),
+            models.UniqueConstraint(fields=['film_work', 'person', 'role'], name='film_work_person_idx'),
         ]
 
 
@@ -120,7 +120,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
         verbose_name = 'Кинопроизведение'
         verbose_name_plural = 'Кинопроизведения'
         constraints = [
-            models.UniqueConstraint(fields=['creation_date'], name='film_work_creation_date_idx'),
+            models.Index(fields=['creation_date'], name='film_work_creation_date_idx'),
         ]
 
     def __str__(self):
