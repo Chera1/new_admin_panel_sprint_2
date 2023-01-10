@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'movies',
+    'templates',
     'utils',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 
@@ -57,6 +60,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'example.urls'
 
 TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [os.path.join(BASE_DIR, 'templates/jinja2')],
+        'APP_DIRS': True,
+        'OPTIONS': {'environment': 'example.jinja2.Environment', },
+    },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -134,3 +143,19 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+# CELERY_RESULT_BACKEND = "db+postgresql://app:123qwe@localhost:5432/movies_database"
+CELERY_RESULT_BACKEND = "django-db"
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+    }
+}
+
+CELERY_CACHE_BACKEND = 'default'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
