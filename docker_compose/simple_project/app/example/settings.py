@@ -144,7 +144,8 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_BROKER_URL = 'redis://{host}}:{port}/0'.format(host=os.environ.get('REDIS_HOST', '127.0.0.1'),
+                                                      port=os.environ.get('REDIS_PORT', 6379))
 
 # CELERY_RESULT_BACKEND = "db+postgresql://app:123qwe@localhost:5432/movies_database"
 CELERY_RESULT_BACKEND = "django-db"
@@ -152,7 +153,8 @@ CELERY_RESULT_BACKEND = "django-db"
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'LOCATION': 'redis://{host}}:{port}/1'.format(host=os.environ.get('REDIS_HOST', '127.0.0.1'),
+                                                      port=os.environ.get('REDIS_PORT', 6379)),
     }
 }
 
